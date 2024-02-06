@@ -1,2 +1,10 @@
-package com.sparta.mytodoapp.dto;public class CommentRequestDto {
+package com.sparta.mytodoapp.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class CommentRequestDto {
+    private String comment;
 }
