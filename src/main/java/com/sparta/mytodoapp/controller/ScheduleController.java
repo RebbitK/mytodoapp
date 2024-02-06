@@ -43,12 +43,12 @@ public class ScheduleController {
         return scheduleService.updateSchedule(id,userDetails,scheduleRequestDto);
     }
     //선택 할일카드 삭제
-    @DeleteMapping("/schedule/{id}")
+    @DeleteMapping("/schedules/{id}")
     public ResponseEntity<?> deleteSchedule(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
         return scheduleService.deleteSchedule(id,userDetails);
     }
     //선택 할일카드 완료
-    @GetMapping("/schedule-complete/{id}")
+    @GetMapping("/schedules-complete/{id}")
     public ResponseEntity<?> completeSchedule(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
         return scheduleService.completeSchedule(id,userDetails);
     }

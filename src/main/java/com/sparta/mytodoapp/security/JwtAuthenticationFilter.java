@@ -61,8 +61,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.setStatus(401);
+        ObjectNode json = new ObjectMapper().createObjectNode();
+        json.put("message", "상태코드:401 로그인실패                     ");
+        String newResponse = new ObjectMapper().writeValueAsString(json);
+        response.setContentType("application/json");
+        response.setContentLength(newResponse.length());
+        response.getOutputStream().write(newResponse.getBytes());
     }
 
 }

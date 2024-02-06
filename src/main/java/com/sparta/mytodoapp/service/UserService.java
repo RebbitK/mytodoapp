@@ -2,12 +2,14 @@ package com.sparta.mytodoapp.service;
 
 import com.sparta.mytodoapp.dto.InfoResponseDto;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
+import com.sparta.mytodoapp.dto.StateResponseDto;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import com.sparta.mytodoapp.repository.UserRepository;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +26,14 @@ public class UserService {
 
     private final String ADMIN_TOKEN = "admin";
 
-    public void signup(SignupRequestDto requestDto) {
+    public ResponseEntity<?> signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            return ResponseEntity.status(400).body(new StateResponseDto("400","중복된 회원입니다."));
         }
 
         // 사용자 ROLE 기본 설정
@@ -40,6 +42,7 @@ public class UserService {
         // 사용자 등록
         User user = new User(username, password, role);
         userRepository.save(user);
+        return ResponseEntity.ok(new StateResponseDto("200","회원가입에 성공하였습니다."));
     }
 
 
