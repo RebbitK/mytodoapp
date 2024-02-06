@@ -1,0 +1,4 @@
+package com.sparta.mytodoapp.security;
+
+public class UserDetailsServiceImpl {
+}
