@@ -6,10 +6,12 @@
 | 할일카드 생성 | POST | /api/schedules/{id}|{"title":"제목", <br/> "text":"내용"} | 할일 카드 생성
 | 전체 할일카드 조회  | GET  | /api/schedules  |     |  할일카드들의 목록 조회 작성일기준 내림차순 |
 | 자신의 할일카드 조회 | GET| /api/my-schedules |  | 자신이 작성한 할일카드 목록 조회 |
-| 선택한 할일카드 조회   | DELETE |/api/schedules/{id}/{password} | |비밀번호가 맞다면 선택한 일정 삭제 |
-| 할일카드 삭제
-| 할일카드 수정
-| 할일카드 완료
-| 댓글 작성
-| 댓글 수정
-| 댓글 삭제
+| 선택한 할일카드 조회   | GET |/api/schedules/{id} | |선택한 할일카드 조회 |
+| 할일카드 삭제 | DELETE | /api/schedules/{id} | | 유저가 작성한 할일카드가 맞으면 삭제
+| 할일카드 수정 | PUT | /api/schedules/{id}| {"title":"제목", <br/> "text":"내용"} | 선택한 할일카드 생성
+| 할일카드 완료 | GET | /api/schedules-complee/{id} | | 선택한 할일카드 완료처리
+| 댓글 작성 | POST | /api/comments/{id} | {"comment":"댓글내용"} | 선택한 할일카드에 댓글 작성
+| 댓글 수정 | PUT |  /api/comments/{id}| {"comment":"댓글내용"} | 선택한 댓글 수정
+| 댓글 삭제 | DELETE | /api/comments/{id}| | 선택한 댓글 삭제
+
+# ERD
