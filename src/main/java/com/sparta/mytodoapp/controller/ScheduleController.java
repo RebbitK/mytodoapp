@@ -54,9 +54,5 @@ public class ScheduleController {
         return scheduleService.completeSchedule(id,userDetails);
     }
 
-    @GetMapping("/user/test/{id}")
-    public ResponseEntity<?> test(@PathVariable Long id){
-        return scheduleService.test(id);
-    }
 
 }
