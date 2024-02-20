@@ -1,6 +1,7 @@
 package com.sparta.mytodoapp.service;
 
 
+import com.sparta.mytodoapp.dto.CommonResponse;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.entity.Schedule;
@@ -27,7 +28,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public ResponseEntity<?> createSchedule(ScheduleRequestDto requestDto, User user) {
+    public ResponseEntity<CommonResponse<?>> createSchedule(ScheduleRequestDto requestDto, User user) {
         Schedule schedule = new Schedule(requestDto,user);
         user.getSchedules().add(schedule);
         scheduleRepository.save(schedule);
@@ -35,18 +36,18 @@ public class ScheduleService {
         return success("할일카드 작성에 성공하셨습니다.",new ScheduleResponseDto(schedule));
     }
 
-    public ResponseEntity<?> getSchedules() {
+    public ResponseEntity<CommonResponse<?>> getSchedules() {
         List<Schedule> schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
         return success("할일카드 전체 조회에 성공하셨습니다.",schedules.stream().map(ScheduleResponseDto::new).toList());
     }
 
-    public ResponseEntity<?> getMtSchedules(UserDetailsImpl userDetails) {
-        List<Schedule> schedules = scheduleRepository.findByUsername(userDetails.getUsername());
+    public ResponseEntity<CommonResponse<?>> getMtSchedules(User user) {
+        List<Schedule> schedules = scheduleRepository.findByUsername(user.getUsername());
         return success("나의 할일카드 조회에 성공하셨습니다.",schedules.stream().map(ScheduleResponseDto::new).toList());
     }
 
 
-    public ResponseEntity<?> getSchedule(Long id) {
+    public ResponseEntity<CommonResponse<?>> getSchedule(Long id) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if(schedule.isEmpty()){
             return badRequest("선택하신 할일카드는 존재하지 않습니다.");
@@ -55,12 +56,12 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateSchedule(Long id, UserDetailsImpl userDetails,ScheduleRequestDto requestDto) {
+    public ResponseEntity<CommonResponse<?>> updateSchedule(Long id, User user,ScheduleRequestDto requestDto) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if(schedule.isEmpty()){
             return badRequest("선택하신 할일카드는 존재하지 않습니다.");
         }
-        if(!Objects.equals(schedule.get().getUsername(), userDetails.getUsername())){
+        if(!Objects.equals(schedule.get().getUsername(), user.getUsername())){
             return forBidden("선택하신 할일카드를 수정하실 권한이 없습니다.");
         }
         schedule.get().update(requestDto);
@@ -68,12 +69,12 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteSchedule(Long id, UserDetailsImpl userDetails) {
+    public ResponseEntity<CommonResponse<?>> deleteSchedule(Long id, User user) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if(schedule.isEmpty()){
             return badRequest("선택하신 할일카드는 존재하지 않습니다.");
         }
-        if(!Objects.equals(schedule.get().getUsername(), userDetails.getUsername())){
+        if(!Objects.equals(schedule.get().getUsername(), user.getUsername())){
             return forBidden("선택하신 할일카드를 삭제하실 권한이 없습니다.");
         }
         scheduleRepository.delete(schedule.get());
@@ -82,12 +83,12 @@ public class ScheduleService {
 
 
     @Transactional
-    public ResponseEntity<?> completeSchedule(Long id, UserDetailsImpl userDetails) {
+    public ResponseEntity<CommonResponse<?>> completeSchedule(Long id, User user) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if(schedule.isEmpty()){
             return badRequest("선택하신 할일카드는 존재하지 않습니다.");
         }
-        if(!Objects.equals(schedule.get().getUsername(), userDetails.getUsername())){
+        if(!Objects.equals(schedule.get().getUsername(), user.getUsername())){
             return forBidden("선택하신 할일카드를 완료하실 권한이 없습니다.");
         }
         if(schedule.get().getComplete()){

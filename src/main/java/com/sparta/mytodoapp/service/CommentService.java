@@ -2,8 +2,10 @@ package com.sparta.mytodoapp.service;
 
 import com.sparta.mytodoapp.dto.CommentRequestDto;
 import com.sparta.mytodoapp.dto.CommentResponseDto;
+import com.sparta.mytodoapp.dto.CommonResponse;
 import com.sparta.mytodoapp.entity.Comment;
 import com.sparta.mytodoapp.entity.Schedule;
+import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.repository.CommentRepository;
 import com.sparta.mytodoapp.repository.ScheduleRepository;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
@@ -24,12 +26,12 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public ResponseEntity<?> createComment(Long id, UserDetailsImpl userDetails, CommentRequestDto requestDto) {
+    public ResponseEntity<CommonResponse<?>> createComment(Long id, User user, CommentRequestDto requestDto) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if(schedule.isEmpty()){
             return badRequest("선택하신 할일카드는 존재하지 않습니다.");
         }
-        Comment comment = new Comment(requestDto, userDetails.getUser());
+        Comment comment = new Comment(requestDto, user);
         schedule.get().getComments().add(comment);
         commentRepository.save(comment);
         scheduleRepository.save(schedule.get());
@@ -37,12 +39,12 @@ public class CommentService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateComment(Long id, UserDetailsImpl userDetails, CommentRequestDto requestDto) {
+    public ResponseEntity<CommonResponse<?>> updateComment(Long id, User user, CommentRequestDto requestDto) {
         Optional<Comment> comment = commentRepository.findById(id);
         if(comment.isEmpty()){
             return badRequest("선택하신 댓글은 존재하지 않습니다.");
         }
-        if(!Objects.equals(comment.get().getUsername(), userDetails.getUsername())){
+        if(!Objects.equals(comment.get().getUsername(), user.getUsername())){
             return forBidden("선택하신 댓글을 수정하실 권한이 없습니다.");
         }
         comment.get().update(requestDto);
@@ -50,12 +52,12 @@ public class CommentService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteComment(Long id, UserDetailsImpl userDetails) {
+    public ResponseEntity<CommonResponse<?>> deleteComment(Long id, User user) {
         Optional<Comment> comment = commentRepository.findById(id);
         if(comment.isEmpty()){
             return badRequest("선택하신 댓글은 존재하지 않습니다.");
         }
-        if(!Objects.equals(comment.get().getUsername(), userDetails.getUsername())){
+        if(!Objects.equals(comment.get().getUsername(), user.getUsername())){
             return forBidden("선택하신 댓글을 삭제하실 권한이 없습니다.");
         }
         commentRepository.delete(comment.get());

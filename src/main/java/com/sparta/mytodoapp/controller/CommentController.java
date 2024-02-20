@@ -2,6 +2,7 @@ package com.sparta.mytodoapp.controller;
 
 import com.sparta.mytodoapp.dto.CommentRequestDto;
 import com.sparta.mytodoapp.dto.CommentResponseDto;
+import com.sparta.mytodoapp.dto.CommonResponse;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import com.sparta.mytodoapp.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +18,17 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments/{id}")
-    public ResponseEntity<?> createComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommentRequestDto requestDto) {
-        return commentService.createComment(id, userDetails, requestDto);
+    public ResponseEntity<CommonResponse<?>> createComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommentRequestDto requestDto) {
+        return commentService.createComment(id, userDetails.getUser(), requestDto);
     }
 
     @PutMapping("/comments/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommentRequestDto requestDto) {
-        return commentService.updateComment(id, userDetails, requestDto);
+    public ResponseEntity<CommonResponse<?>> updateComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommentRequestDto requestDto) {
+        return commentService.updateComment(id, userDetails.getUser(), requestDto);
     }
 
     @DeleteMapping("/comments/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.deleteComment(id, userDetails);
+    public ResponseEntity<CommonResponse<?>> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.deleteComment(id, userDetails.getUser());
     }
 }

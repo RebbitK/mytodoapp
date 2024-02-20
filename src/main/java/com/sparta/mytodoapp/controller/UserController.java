@@ -1,5 +1,6 @@
 package com.sparta.mytodoapp.controller;
 
+import com.sparta.mytodoapp.dto.CommonResponse;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import com.sparta.mytodoapp.service.UserService;
@@ -17,13 +18,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/user/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<CommonResponse<?>> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         return userService.signup(requestDto);
     }
 
     @GetMapping("/user/info")
-    public ResponseEntity<?> info(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.info(userDetails);
+    public ResponseEntity<CommonResponse<?>> info(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.info(userDetails.getUser());
     }
 
 }

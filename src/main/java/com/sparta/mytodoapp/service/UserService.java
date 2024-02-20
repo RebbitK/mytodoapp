@@ -46,7 +46,7 @@ public class UserService {
     }
 
 
-    public ResponseEntity<?> info(UserDetailsImpl userDetails) {;
-        return success("정보 조회에 성공하셨습니다.",new InfoResponseDto(userDetails.getUsername(), userDetails.getUser().getRole()));
+    public ResponseEntity<CommonResponse<?>> info(User user) {;
+        return success("정보 조회에 성공하셨습니다.",new InfoResponseDto(user.getUsername(), user.getRole()));
     }
 }
