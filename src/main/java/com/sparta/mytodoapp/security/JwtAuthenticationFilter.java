@@ -1,10 +1,8 @@
 package com.sparta.mytodoapp.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sparta.mytodoapp.dto.LoginRequestDto;
-import com.sparta.mytodoapp.dto.StateResponseDto;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
