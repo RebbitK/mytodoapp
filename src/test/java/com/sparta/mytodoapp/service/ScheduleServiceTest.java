@@ -89,7 +89,6 @@ class ScheduleServiceTest {
         User user = testUser();
         Schedule schedule = testSchedule();
         user.getSchedules().add(schedule);
-        mockScheduleRepository.save(schedule);
         when(mockScheduleRepository.findByUsername(user.getUsername())).thenReturn(user.getSchedules());
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.getMySchedules(user);
@@ -108,7 +107,6 @@ class ScheduleServiceTest {
     void getSchedule() {
         //given
         Schedule schedule = testSchedule();
-        mockScheduleRepository.save(schedule);
         when(mockScheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.getSchedule(schedule.getId());
@@ -138,7 +136,6 @@ class ScheduleServiceTest {
         User user = testUser();
         Schedule schedule = testSchedule();
         ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto("수정제목", "수정내용");
-        mockScheduleRepository.save(schedule);
         given(mockScheduleRepository.findById(schedule.getId())).willReturn(Optional.of(schedule));
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.updateSchedule(schedule.getId(), user, scheduleRequestDto);
@@ -171,7 +168,6 @@ class ScheduleServiceTest {
         User user = new User();
         Schedule schedule = testSchedule();
         ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto("수정제목", "수정내용");
-        mockScheduleRepository.save(schedule);
         when(mockScheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.updateSchedule(schedule.getId(), user, scheduleRequestDto);
@@ -186,7 +182,6 @@ class ScheduleServiceTest {
         //given
         User user = testUser();
         Schedule schedule = testSchedule();
-        mockScheduleRepository.save(schedule);
         when(mockScheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.deleteSchedule(schedule.getId(), user);
@@ -228,7 +223,6 @@ class ScheduleServiceTest {
         //given
         User user = testUser();
         Schedule schedule = testSchedule();
-        mockScheduleRepository.save(schedule);
         when(mockScheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.completeSchedule(schedule.getId(), user);
@@ -272,7 +266,6 @@ class ScheduleServiceTest {
         User user = testUser();
         Schedule schedule = testSchedule();
         schedule.setComplete(true);
-        mockScheduleRepository.save(schedule);
         when(mockScheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.completeSchedule(schedule.getId(),user);
