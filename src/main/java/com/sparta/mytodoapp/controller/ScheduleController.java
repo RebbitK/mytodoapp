@@ -31,7 +31,7 @@ public class ScheduleController {
     // 자신의 할일카드 조회
     @GetMapping("/my-schedules")
     public ResponseEntity<CommonResponse<?>> getMySchedules(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return scheduleService.getMtSchedules(userDetails.getUser());
+        return scheduleService.getMySchedules(userDetails.getUser());
     }
     //선택 할일카드 조회
     @GetMapping("/schedules/{id}")

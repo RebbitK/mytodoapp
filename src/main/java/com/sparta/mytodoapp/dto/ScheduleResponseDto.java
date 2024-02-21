@@ -31,4 +31,8 @@ public class ScheduleResponseDto {
         this.modifiedAt = schedule.getModifiedAt();
         this.commentList = schedule.getComments();
     }
+
+    public boolean getComplete() {
+        return complete;
+    }
 }

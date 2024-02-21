@@ -8,7 +8,6 @@ import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.repository.ScheduleRepository;
 import com.sparta.mytodoapp.repository.UserRepository;
-import com.sparta.mytodoapp.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ public class ScheduleService {
         return success("할일카드 전체 조회에 성공하셨습니다.",schedules.stream().map(ScheduleResponseDto::new).toList());
     }
 
-    public ResponseEntity<CommonResponse<?>> getMtSchedules(User user) {
+    public ResponseEntity<CommonResponse<?>> getMySchedules(User user) {
         List<Schedule> schedules = scheduleRepository.findByUsername(user.getUsername());
         return success("나의 할일카드 조회에 성공하셨습니다.",schedules.stream().map(ScheduleResponseDto::new).toList());
     }

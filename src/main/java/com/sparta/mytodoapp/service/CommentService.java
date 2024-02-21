@@ -8,7 +8,6 @@ import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.repository.CommentRepository;
 import com.sparta.mytodoapp.repository.ScheduleRepository;
-import com.sparta.mytodoapp.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
