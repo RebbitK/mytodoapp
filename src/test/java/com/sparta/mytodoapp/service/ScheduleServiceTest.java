@@ -57,6 +57,9 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.createSchedule(scheduleRequestDto, user);
         //then
+        ScheduleResponseDto scheduleResponseDto = (ScheduleResponseDto) response.getBody().getData();
+        assertEquals(scheduleResponseDto.getText(),scheduleRequestDto.getText());
+        assertEquals(scheduleResponseDto.getTitle(),scheduleRequestDto.getTitle());
         assertEquals(response.getBody().getMsg(), "할일카드 작성에 성공하셨습니다.");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
@@ -75,6 +78,8 @@ class ScheduleServiceTest {
             assertEquals(scheduleResponseDtos.get(i).getText(), schedules.get(i).getText());
             assertEquals(scheduleResponseDtos.get(i).getTitle(), schedules.get(i).getTitle());
         }
+        assertEquals(response.getBody().getMsg(), "할일카드 전체 조회에 성공하셨습니다.");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -94,6 +99,8 @@ class ScheduleServiceTest {
             assertEquals(scheduleResponseDtos.get(i).getText(), user.getSchedules().get(i).getText());
             assertEquals(scheduleResponseDtos.get(i).getTitle(), user.getSchedules().get(i).getTitle());
         }
+        assertEquals(response.getBody().getMsg(), "나의 할일카드 조회에 성공하셨습니다.");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -109,6 +116,8 @@ class ScheduleServiceTest {
         ScheduleResponseDto scheduleResponseDto = (ScheduleResponseDto) response.getBody().getData();
         assertEquals(scheduleResponseDto.getTitle(), schedule.getTitle());
         assertEquals(scheduleResponseDto.getText(), schedule.getText());
+        assertEquals(response.getBody().getMsg(), "선택하신 할일카드 조회에 성공하셨습니다.");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -137,6 +146,8 @@ class ScheduleServiceTest {
         ScheduleResponseDto scheduleResponseDto = (ScheduleResponseDto) response.getBody().getData();
         assertEquals(scheduleResponseDto.getTitle(), scheduleRequestDto.getTitle());
         assertEquals(scheduleResponseDto.getText(), scheduleRequestDto.getText());
+        assertEquals(response.getBody().getMsg(), "할일카드를 수정하셨습니다.");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -149,8 +160,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.updateSchedule(schedule.getId(), user, scheduleRequestDto);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
         assertEquals(response.getBody().getMsg(),"선택하신 할일카드는 존재하지 않습니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -165,8 +176,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.updateSchedule(schedule.getId(), user, scheduleRequestDto);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
         assertEquals(response.getBody().getMsg(),"선택하신 할일카드를 수정하실 권한이 없습니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
     }
 
     @Test
@@ -180,8 +191,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.deleteSchedule(schedule.getId(), user);
         //then
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(response.getBody().getMsg(), "삭제에 성공하셨습니다.");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -193,8 +204,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.deleteSchedule(schedule.getId(),user);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
         assertEquals(response.getBody().getMsg(),"선택하신 할일카드는 존재하지 않습니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -207,8 +218,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.deleteSchedule(schedule.getId(),user);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
         assertEquals(response.getBody().getMsg(),"선택하신 할일카드를 삭제하실 권한이 없습니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
     }
 
     @Test
@@ -224,6 +235,8 @@ class ScheduleServiceTest {
         //then
         ScheduleResponseDto scheduleResponseDto = (ScheduleResponseDto) response.getBody().getData();
         assertTrue(scheduleResponseDto.getComplete());
+        assertEquals(response.getBody().getMsg(), "할일카드를 완료하셨습니다.");
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
     @Test
     @DisplayName("할일 카드 완료 실패 - 없는 할일 카드 테스트")
@@ -234,8 +247,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.completeSchedule(schedule.getId(),user);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
         assertEquals(response.getBody().getMsg(),"선택하신 할일카드는 존재하지 않습니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -248,8 +261,8 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.completeSchedule(schedule.getId(),user);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
         assertEquals(response.getBody().getMsg(),"선택하신 할일카드를 완료하실 권한이 없습니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
     }
 
     @Test
@@ -264,7 +277,7 @@ class ScheduleServiceTest {
         //when
         ResponseEntity<CommonResponse<?>> response = scheduleService.completeSchedule(schedule.getId(),user);
         //then
-        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
         assertEquals(response.getBody().getMsg(),"이미 완료한 작업입니다.");
+        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 }
