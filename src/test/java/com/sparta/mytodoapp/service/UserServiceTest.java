@@ -7,9 +7,10 @@ import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,17 +21,17 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 class UserServiceTest {
-    @Autowired
-    UserService userService;
     @Mock
     UserRepository userRepository;
 
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @InjectMocks
+    UserService userService;
     @Test
     @DisplayName("회원가입 테스트")
     void signupTest(){
@@ -54,10 +55,9 @@ class UserServiceTest {
         signupRequestDto.setUsername("Test");
         signupRequestDto.setPassword("12345678");
         User user = new User("Test","12345678",UserRoleEnum.USER);
-        UserService service = new UserService(userRepository,passwordEncoder);
         given(userRepository.findByUsername(signupRequestDto.getUsername())).willReturn(Optional.of(user));
         //when
-        ResponseEntity<CommonResponse<?>> response = service.signup(signupRequestDto);
+        ResponseEntity<CommonResponse<?>> response = userService.signup(signupRequestDto);
         //then
         assertEquals(response.getBody().getMsg(),"중복된 회원명 입니다.");
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
