@@ -1,17 +1,14 @@
 package com.sparta.mytodoapp.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodoapp.config.WebSecurityConfig;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
-import com.sparta.mytodoapp.dto.SignupRequestDto;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import com.sparta.mytodoapp.mvc.MockSpringSecurityFilter;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import com.sparta.mytodoapp.service.ScheduleService;
-import com.sparta.mytodoapp.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

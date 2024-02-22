@@ -3,6 +3,7 @@ package com.sparta.mytodoapp.service;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -13,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserDetailsTest {
 
     @Test
-    void testUserDetailsImpl() {
+    @DisplayName("유저 details 테스트")
+    void userDetailsImplTest() {
         // Given
         User user = new User();
         user.setUsername("testuser");
