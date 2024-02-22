@@ -49,7 +49,7 @@ public class ScheduleController {
         return scheduleService.deleteSchedule(id,userDetails.getUser());
     }
     //선택 할일카드 완료
-    @GetMapping("/schedules-complee/{id}t")
+    @GetMapping("/schedules-complete/{id}")
     public ResponseEntity<CommonResponse<?>> completeSchedule(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
         return scheduleService.completeSchedule(id,userDetails.getUser());
     }
