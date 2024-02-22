@@ -1,6 +1,7 @@
 package com.sparta.mytodoapp.service;
 
 import com.sparta.mytodoapp.dto.CommonResponse;
+import com.sparta.mytodoapp.dto.LoginRequestDto;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
@@ -32,6 +33,7 @@ class UserServiceTest {
 
     @InjectMocks
     UserService userService;
+
     @Test
     @DisplayName("회원가입 테스트")
     void signupTest(){
