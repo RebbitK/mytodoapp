@@ -8,7 +8,7 @@ import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import com.sparta.mytodoapp.mvc.MockSpringSecurityFilter;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
-import com.sparta.mytodoapp.service.UserService;
+import com.sparta.mytodoapp.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    UserService userService;
+	UserServiceImpl userServiceImpl;
 
     @MockBean
     JwtUtil jwtUtil;

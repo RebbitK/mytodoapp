@@ -8,7 +8,7 @@ import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import com.sparta.mytodoapp.mvc.MockSpringSecurityFilter;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
-import com.sparta.mytodoapp.service.ScheduleService;
+import com.sparta.mytodoapp.service.ScheduleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ public class ScheduleControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    ScheduleService scheduleService;
+    ScheduleServiceImpl scheduleServiceImpl;
 
     @MockBean
     JwtUtil jwtUtil;
