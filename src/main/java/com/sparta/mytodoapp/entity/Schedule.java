@@ -30,7 +30,7 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JoinColumn(name="schedule_id")
     private List<Comment> comments = new ArrayList<>();
 

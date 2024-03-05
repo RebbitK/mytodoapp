@@ -1,101 +1,64 @@
 package com.sparta.mytodoapp.service;
 
-
-import com.sparta.mytodoapp.dto.CommonResponse;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
-import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
-import com.sparta.mytodoapp.repository.ScheduleRepository;
-import com.sparta.mytodoapp.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
-import static com.sparta.mytodoapp.service.StatusCheck.*;
+public interface ScheduleService {
 
-@Service
-@RequiredArgsConstructor
-public class ScheduleService {
+	/**
+	 * 게시글 생성
+	 * @param requestDto 게시글 생성 요청정보
+	 * @param user 게시글 생성 요청자
+	 * @return 게시글 생성 결과
+	 */
+	ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user);
 
-    private final UserRepository userRepository;
-    private final ScheduleRepository scheduleRepository;
+	/**
+	 * 게시글 전체 조회
+	 * @return 게시글 전체 조회 결과
+	 */
+	List<ScheduleResponseDto> getSchedules();
 
-    @Transactional
-    public ResponseEntity<CommonResponse<?>> createSchedule(ScheduleRequestDto requestDto, User user) {
-        Schedule schedule = new Schedule(requestDto,user);
-        user.getSchedules().add(schedule);
-        scheduleRepository.save(schedule);
-        userRepository.save(user);
-        return success("할일카드 작성에 성공하셨습니다.",new ScheduleResponseDto(schedule));
-    }
+	/**
+	 * 나의 게시글 조회
+	 * @param user 게시글 조회 요청자
+	 * @return 나의 게시글 조회 결과
+	 */
+	List<ScheduleResponseDto> getMySchedules(User user);
 
-    public ResponseEntity<CommonResponse<?>> getSchedules() {
-        List<Schedule> schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
-        return success("할일카드 전체 조회에 성공하셨습니다.",schedules.stream().map(ScheduleResponseDto::new).toList());
-    }
+	/**
+	 * 선택 게시글 조회
+	 * @param id 게시글 조회 ID
+	 * @return 선택 게시글 조회 결과
+	 */
+	ScheduleResponseDto getSchedule(Long id);
 
-    public ResponseEntity<CommonResponse<?>> getMySchedules(User user) {
-        List<Schedule> schedules = scheduleRepository.findByUsername(user.getUsername());
-        return success("나의 할일카드 조회에 성공하셨습니다.",schedules.stream().map(ScheduleResponseDto::new).toList());
-    }
+	/**
+	 * 게시글 수정
+	 * @param id 수정할 게시글 ID
+	 * @param user 게시글 수정 요청자
+	 * @param requestDto 게시글 수정 요청정보
+	 * @return 게시글 수정 결과
+	 */
+	ScheduleResponseDto updateSchedule(Long id, User user,ScheduleRequestDto requestDto);
 
+	/**
+	 * 게시글 삭제
+	 * @param id 삭제할 게시글 ID
+	 * @param user 게시글 삭제 요청자
+	 * @return 게시글 삭제 결과
+	 */
+	Boolean deleteSchedule(Long id, User user);
 
-    public ResponseEntity<CommonResponse<?>> getSchedule(Long id) {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        if(schedule.isEmpty()){
-            return badRequest("선택하신 할일카드는 존재하지 않습니다.");
-        }
-        return success("선택하신 할일카드 조회에 성공하셨습니다.",new ScheduleResponseDto(schedule.get()));
-    }
+	/**
+	 * 게시글 완료
+	 * @param id 완료할 게시글 ID
+	 * @param user 게시글 완료 요청자
+	 * @return 게시글 완료 결과
+	 */
 
-    @Transactional
-    public ResponseEntity<CommonResponse<?>> updateSchedule(Long id, User user,ScheduleRequestDto requestDto) {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        if(schedule.isEmpty()){
-            return badRequest("선택하신 할일카드는 존재하지 않습니다.");
-        }
-        if(!Objects.equals(schedule.get().getUsername(), user.getUsername())){
-            return forBidden("선택하신 할일카드를 수정하실 권한이 없습니다.");
-        }
-        schedule.get().update(requestDto);
-        return success("할일카드를 수정하셨습니다.",new ScheduleResponseDto(schedule.get()));
-    }
-
-    @Transactional
-    public ResponseEntity<CommonResponse<?>> deleteSchedule(Long id, User user) {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        if(schedule.isEmpty()){
-            return badRequest("선택하신 할일카드는 존재하지 않습니다.");
-        }
-        if(!Objects.equals(schedule.get().getUsername(), user.getUsername())){
-            return forBidden("선택하신 할일카드를 삭제하실 권한이 없습니다.");
-        }
-        scheduleRepository.delete(schedule.get());
-        return success("삭제에 성공하셨습니다.","");
-    }
-
-
-    @Transactional
-    public ResponseEntity<CommonResponse<?>> completeSchedule(Long id, User user) {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        if(schedule.isEmpty()){
-            return badRequest("선택하신 할일카드는 존재하지 않습니다.");
-        }
-        if(!Objects.equals(schedule.get().getUsername(), user.getUsername())){
-            return forBidden("선택하신 할일카드를 완료하실 권한이 없습니다.");
-        }
-        if(schedule.get().getComplete()){
-            return badRequest("이미 완료한 작업입니다.");
-        }
-        schedule.get().setComplete(true);
-
-        return success("할일카드를 완료하셨습니다.",new ScheduleResponseDto(schedule.get()));
-    }
+	ScheduleResponseDto completeSchedule(Long id, User user);
 
 }
