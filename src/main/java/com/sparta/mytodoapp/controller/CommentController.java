@@ -67,23 +67,23 @@ public class CommentController {
 				.build());
 	}
 
-	@ExceptionHandler({IllegalArgumentException.class})
-	public ResponseEntity<RestApiException> badRequest(IllegalArgumentException e) {
-		RestApiException restApiException = new RestApiException(e.getMessage(),
-			HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<>(
-			restApiException,
-			HttpStatus.BAD_REQUEST
-		);
-	}
-
-	@ExceptionHandler({AccessDeniedException.class})
-	public ResponseEntity<RestApiException> forBidden(AccessDeniedException e) {
-		RestApiException restApiException = new RestApiException(e.getMessage(),
-			HttpStatus.FORBIDDEN.value());
-		return new ResponseEntity<>(
-			restApiException,
-			HttpStatus.FORBIDDEN
-		);
-	}
+//	@ExceptionHandler({IllegalArgumentException.class})
+//	public ResponseEntity<RestApiException> badRequest(IllegalArgumentException e) {
+//		RestApiException restApiException = new RestApiException(e.getMessage(),
+//			HttpStatus.BAD_REQUEST.value());
+//		return new ResponseEntity<>(
+//			restApiException,
+//			HttpStatus.BAD_REQUEST
+//		);
+//	}
+//
+//	@ExceptionHandler({AccessDeniedException.class})
+//	public ResponseEntity<RestApiException> forBidden(AccessDeniedException e) {
+//		RestApiException restApiException = new RestApiException(e.getMessage(),
+//			HttpStatus.FORBIDDEN.value());
+//		return new ResponseEntity<>(
+//			restApiException,
+//			HttpStatus.FORBIDDEN
+//		);
+//	}
 }

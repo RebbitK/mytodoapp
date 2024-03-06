@@ -50,14 +50,14 @@ public class UserController {
 				.build());
 	}
 
-	@ExceptionHandler({IllegalArgumentException.class})
-	public ResponseEntity<RestApiException> badRequest(IllegalArgumentException e) {
-		RestApiException restApiException = new RestApiException(e.getMessage(),
-			HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<>(
-			restApiException,
-			HttpStatus.BAD_REQUEST
-		);
-	}
+//	@ExceptionHandler({IllegalArgumentException.class})
+//	public ResponseEntity<RestApiException> badRequest(IllegalArgumentException e) {
+//		RestApiException restApiException = new RestApiException(e.getMessage(),
+//			HttpStatus.BAD_REQUEST.value());
+//		return new ResponseEntity<>(
+//			restApiException,
+//			HttpStatus.BAD_REQUEST
+//		);
+//	}
 
 }
