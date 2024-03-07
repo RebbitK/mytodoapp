@@ -33,14 +33,16 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public Page<ScheduleResponseDto> getSchedules() {
-        Page<Schedule> schedules = jpaScheduleRepository.findAllByOrderByModifiedAtDesc(PageRequest.of(0,5));
+        Page<Schedule> schedules = jpaScheduleRepository.findAllByOrderByModifiedAtDesc(PageRequest.of(0,5)).orElseThrow(()->
+            new IllegalArgumentException("현재 작성된 할일카드가 없습니다."));
         return schedules.map(ScheduleResponseDto::new);
     }
 
     @Override
     public Page<ScheduleResponseDto> getMySchedules(User user) {
         Page<Schedule> schedules = jpaScheduleRepository.findByUsername(user.getUsername(),
-            PageRequest.of(0,5));
+            PageRequest.of(0,5)).orElseThrow(()->
+            new IllegalArgumentException("현재 작성하신 할일카드가 없습니다."));
         return schedules.map(ScheduleResponseDto::new);
     }
 
