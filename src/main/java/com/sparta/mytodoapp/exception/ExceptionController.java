@@ -39,7 +39,8 @@ public class ExceptionController {
 
 	@ExceptionHandler({
 		JwtException.class,
-		AccessDeniedException.class
+		AccessDeniedException.class,
+		NoPermissionException.class
 	})
 	public ResponseEntity<RestApiException> handleJwtException(Exception e) {
 		return createResponse(HttpStatus.FORBIDDEN, e.getMessage());

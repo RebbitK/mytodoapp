@@ -5,6 +5,7 @@ import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.exception.NoPermissionException;
 import com.sparta.mytodoapp.repository.ScheduleRepository;
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +55,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->
             new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
         if(!Objects.equals(schedule.getUsername(), user.getUsername())){
-            throw new AccessDeniedException("선택하신 할일카드를 수정할 권한이 없습니다.");
+            throw new NoPermissionException("선택하신 할일카드를 수정할 권한이 없습니다.");
         }
         schedule.update(requestDto);
         return new ScheduleResponseDto(schedule);
@@ -66,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->
             new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
         if(!Objects.equals(schedule.getUsername(), user.getUsername())){
-            throw new AccessDeniedException("선택하신 할일카드를 삭제할 권한이 없습니다.");
+            throw new NoPermissionException("선택하신 할일카드를 삭제할 권한이 없습니다.");
         }
         scheduleRepository.delete(schedule);
         return true;
@@ -78,7 +79,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->
             new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
         if(!Objects.equals(schedule.getUsername(), user.getUsername())){
-            throw new AccessDeniedException("선택하신 할일카드를 완료할 권한이 없습니다.");
+            throw new NoPermissionException("선택하신 할일카드를 완료할 권한이 없습니다.");
         }
         if(schedule.getComplete()){
             throw new IllegalArgumentException("이미 완료한 작업입니다.");
