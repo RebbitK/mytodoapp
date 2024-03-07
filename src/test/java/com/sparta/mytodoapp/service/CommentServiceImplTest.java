@@ -6,7 +6,7 @@ import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.repository.CommentRepository;
-import com.sparta.mytodoapp.repository.ScheduleRepository;
+import com.sparta.mytodoapp.repository.JpaScheduleRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,7 +21,7 @@ class CommentServiceImplTest {
     @Mock
     CommentRepository commentRepository;
     @Mock
-    ScheduleRepository scheduleRepository;
+	JpaScheduleRepository jpaScheduleRepository;
     @InjectMocks
     CommentServiceImpl commentServiceImpl;
 

@@ -4,6 +4,7 @@ import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.entity.User;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ScheduleService {
 
@@ -19,14 +20,14 @@ public interface ScheduleService {
 	 * 게시글 전체 조회
 	 * @return 게시글 전체 조회 결과
 	 */
-	List<ScheduleResponseDto> getSchedules();
+	Page<ScheduleResponseDto> getSchedules();
 
 	/**
 	 * 나의 게시글 조회
 	 * @param user 게시글 조회 요청자
 	 * @return 나의 게시글 조회 결과
 	 */
-	List<ScheduleResponseDto> getMySchedules(User user);
+	Page<ScheduleResponseDto> getMySchedules(User user);
 
 	/**
 	 * 선택 게시글 조회

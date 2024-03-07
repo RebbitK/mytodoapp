@@ -8,6 +8,7 @@ import com.sparta.mytodoapp.security.UserDetailsImpl;
 import com.sparta.mytodoapp.service.ScheduleServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,10 +46,10 @@ public class ScheduleController {
 
 	//전체 할일카드 조회
 	@GetMapping("/schedules")
-	public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getSchedules() {
-		List<ScheduleResponseDto> responseDtoList = scheduleServiceImpl.getSchedules();
+	public ResponseEntity<CommonResponse<Page<ScheduleResponseDto>>> getSchedules() {
+		Page<ScheduleResponseDto> responseDtoList = scheduleServiceImpl.getSchedules();
 		return ResponseEntity.ok()
-			.body(CommonResponse.<List<ScheduleResponseDto>>builder()
+			.body(CommonResponse.<Page<ScheduleResponseDto>>builder()
 				.msg("전체 할일카드 조회에 성공하셨습니다.")
 				.statusCode(HttpStatus.OK.value())
 				.data(responseDtoList)
@@ -57,12 +58,12 @@ public class ScheduleController {
 
 	// 자신의 할일카드 조회
 	@GetMapping("/my-schedules")
-	public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getMySchedules(
+	public ResponseEntity<CommonResponse<Page<ScheduleResponseDto>>> getMySchedules(
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		List<ScheduleResponseDto> responseDtoList = scheduleServiceImpl.getMySchedules(
+		Page<ScheduleResponseDto> responseDtoList = scheduleServiceImpl.getMySchedules(
 			userDetails.getUser());
 		return ResponseEntity.ok()
-			.body(CommonResponse.<List<ScheduleResponseDto>>builder()
+			.body(CommonResponse.<Page<ScheduleResponseDto>>builder()
 				.msg("나의 할일카드 조회에 성공하셨습니다.")
 				.statusCode(HttpStatus.OK.value())
 				.data(responseDtoList)

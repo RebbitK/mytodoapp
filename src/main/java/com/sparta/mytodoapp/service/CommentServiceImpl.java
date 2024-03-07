@@ -7,10 +7,9 @@ import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.exception.NoPermissionException;
 import com.sparta.mytodoapp.repository.CommentRepository;
-import com.sparta.mytodoapp.repository.ScheduleRepository;
+import com.sparta.mytodoapp.repository.JpaScheduleRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
-    private final ScheduleRepository scheduleRepository;
+    private final JpaScheduleRepository jpaScheduleRepository;
 
     @Override
     @Transactional
     public CommentResponseDto createComment(Long id, User user, CommentRequestDto requestDto) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->
+        Schedule schedule = jpaScheduleRepository.findById(id).orElseThrow(()->
             new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
         Comment comment = new Comment(requestDto, user);
         schedule.getComments().add(comment);
         commentRepository.save(comment);
-        scheduleRepository.save(schedule);
+        jpaScheduleRepository.save(schedule);
         return new CommentResponseDto(comment);
     }
 

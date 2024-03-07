@@ -26,8 +26,9 @@ public class UserServiceImpl implements UserService{
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
-        userRepository.findByUsername(username).orElseThrow(()->
-            new IllegalArgumentException("중복된 이름을 가진 회원이 있습니다."));
+        if(userRepository.findByUsername(username).isPresent()){
+			throw new IllegalArgumentException("중복된 이름을 가진 회원이 있습니다.");
+        }
         // 사용자 ROLE 기본 설정
         UserRoleEnum role = USER;
 
