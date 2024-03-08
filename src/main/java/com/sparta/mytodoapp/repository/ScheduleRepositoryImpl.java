@@ -5,16 +5,12 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.mytodoapp.entity.QSchedule;
 import com.sparta.mytodoapp.entity.Schedule;
-import io.jsonwebtoken.lang.Assert;
-import jakarta.persistence.EntityManager;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor

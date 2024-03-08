@@ -9,12 +9,16 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "users")
+@DynamicInsert
+@DynamicUpdate
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
