@@ -15,8 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(AuditingConfig.class)
 class ScheduleRepositoryTest {
 
-    @Autowired
-	JpaScheduleRepository jpaScheduleRepository;
+//    @Autowired
+//	JpaScheduleRepository jpaScheduleRepository;
 
     private Schedule testSchedule(){
         ScheduleRequestDto requestDto = new ScheduleRequestDto("제목", "내용");

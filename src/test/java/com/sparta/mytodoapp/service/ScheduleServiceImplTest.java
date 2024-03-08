@@ -4,7 +4,6 @@ import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
-import com.sparta.mytodoapp.repository.JpaScheduleRepository;
 import com.sparta.mytodoapp.repository.UserRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ScheduleServiceImplTest {
     @Mock
     UserRepository userRepository;
-    @Mock
-    JpaScheduleRepository mockJpaScheduleRepository;
+//    @Mock
+//    JpaScheduleRepository mockJpaScheduleRepository;
     @InjectMocks //스케쥴 서비스 안에다가 mock으로 해준 의존성 주입 자동으로 주입 위에  ScheduleRepository mockScheduleRepository; UserRepository userRepository;
     ScheduleServiceImpl scheduleServiceImpl;
 

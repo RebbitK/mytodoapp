@@ -1,28 +1,33 @@
 package com.sparta.mytodoapp.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.mytodoapp.entity.QSchedule;
 import com.sparta.mytodoapp.entity.Schedule;
+import io.jsonwebtoken.lang.Assert;
+import jakarta.persistence.EntityManager;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+
 @RequiredArgsConstructor
 public class ScheduleRepositoryImpl implements ScheduleRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Optional<Page<Schedule>> findByUsername(String username, Pageable pageable){
+	public Optional<Page<Schedule>> findByUsername(String username, Pageable pageable) {
 		var query = jpaQueryFactory.select(QSchedule.schedule)
 			.from(QSchedule.schedule)
 			.where(
-				QSchedule.schedule.username.eq(username)
+				usernameEq(username)
 			)
 			.leftJoin(QSchedule.schedule.comments).fetchJoin()
 			.offset(pageable.getOffset())
@@ -31,7 +36,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 		var count = jpaQueryFactory.select(Wildcard.count)
 			.from(QSchedule.schedule)
 			.where(
-				QSchedule.schedule.username.eq(username)
+				usernameEq(username)
 			)
 			.fetch()
 			.get(0);
@@ -40,7 +45,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 	}
 
 	@Override
-	public Optional<Page<Schedule>> findAllByOrderByModifiedAtDesc(Pageable pageable){
+	public Optional<Page<Schedule>> findAllByOrderByModifiedAtDesc(Pageable pageable) {
 		var query = jpaQueryFactory.select(QSchedule.schedule)
 			.from(QSchedule.schedule)
 			.leftJoin(QSchedule.schedule.comments).fetchJoin()
@@ -55,5 +60,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
 		return Optional.of(PageableExecutionUtils.getPage(query, pageable, () -> count));
 	}
+
+	private BooleanExpression usernameEq(String username) {
+		return Objects.nonNull(username) ? QSchedule.schedule.username.eq(username) : null;
+	}
+
 
 }
