@@ -58,7 +58,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 	}
 
 	private BooleanExpression usernameEq(String username) {
-		return Objects.nonNull(username) ? QSchedule.schedule.username.eq(username) : null;
+		return Objects.nonNull(username) ? QSchedule.schedule.user.username.eq(username) : null;
 	}
 
 

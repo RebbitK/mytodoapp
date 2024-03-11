@@ -20,7 +20,7 @@ class ScheduleTest {
         // Then
         assertEquals(title, schedule.getTitle());
         assertEquals(text, schedule.getText());
-        assertEquals(user.getUsername(), schedule.getUsername());
+        assertEquals(user.getUsername(), schedule.getUser().getUsername());
         assertFalse(schedule.getComplete());
         assertTrue(schedule.getComments().isEmpty());
     }

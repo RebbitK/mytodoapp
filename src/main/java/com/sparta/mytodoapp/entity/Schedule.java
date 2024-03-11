@@ -31,17 +31,19 @@ public class Schedule extends Timestamped {
     private String text;
     @Column(nullable = false)
     private boolean complete = false;
-    @Column(nullable = false)
-    private String username;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JoinColumn(name="schedule_id")
     private List<Comment> comments = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
     public Schedule(ScheduleRequestDto requestDto,User user) {
         this.title = requestDto.getTitle();
         this.text = requestDto.getText();
-        this.username = user.getUsername();
+        this.user = user;
     }
 
     public boolean getComplete() {

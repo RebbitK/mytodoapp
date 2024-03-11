@@ -29,7 +29,6 @@ class ScheduleResponseDtoTest {
         schedule.setId(id);
         schedule.setTitle(title);
         schedule.setText(text);
-        schedule.setUsername(username);
         schedule.setComments(commentList);
 
         // when

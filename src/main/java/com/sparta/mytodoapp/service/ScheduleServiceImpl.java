@@ -7,7 +7,6 @@ import com.sparta.mytodoapp.entity.Schedule;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.exception.NoPermissionException;
 import com.sparta.mytodoapp.repository.JpaScheduleRepository;
-import com.sparta.mytodoapp.repository.ScheduleRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public ScheduleResponseDto updateSchedule(Long id, User user, ScheduleRequestDto requestDto) {
 		Schedule schedule = jpaScheduleRepository.findById(id).orElseThrow(() ->
 			new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
-		if (!Objects.equals(schedule.getUsername(), user.getUsername())) {
+		if (!Objects.equals(schedule.getUser().getUsername(), user.getUsername())) {
 			throw new NoPermissionException("선택하신 할일카드를 수정할 권한이 없습니다.");
 		}
 		schedule.update(requestDto);
@@ -70,7 +69,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public Boolean deleteSchedule(Long id, User user) {
 		Schedule schedule = jpaScheduleRepository.findById(id).orElseThrow(() ->
 			new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
-		if (!Objects.equals(schedule.getUsername(), user.getUsername())) {
+		if (!Objects.equals(schedule.getUser().getUsername(), user.getUsername())) {
 			throw new NoPermissionException("선택하신 할일카드를 삭제할 권한이 없습니다.");
 		}
 		jpaScheduleRepository.delete(schedule);
@@ -82,7 +81,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public ScheduleResponseDto completeSchedule(Long id, User user) {
 		Schedule schedule = jpaScheduleRepository.findById(id).orElseThrow(() ->
 			new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
-		if (!Objects.equals(schedule.getUsername(), user.getUsername())) {
+		if (!Objects.equals(schedule.getUser().getUsername(), user.getUsername())) {
 			throw new NoPermissionException("선택하신 할일카드를 완료할 권한이 없습니다.");
 		}
 		if (schedule.getComplete()) {
