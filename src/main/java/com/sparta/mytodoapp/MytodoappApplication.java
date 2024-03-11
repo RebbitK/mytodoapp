@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
-@EnableJpaAuditing
+//@EnableJpaAuditing
 @SpringBootApplication
 public class MytodoappApplication {
 
