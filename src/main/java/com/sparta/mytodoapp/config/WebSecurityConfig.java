@@ -1,9 +1,9 @@
 package com.sparta.mytodoapp.config;
 
 import com.sparta.mytodoapp.jwt.JwtUtil;
+import com.sparta.mytodoapp.repository.UserRepository;
 import com.sparta.mytodoapp.security.JwtAuthenticationFilter;
 import com.sparta.mytodoapp.security.JwtAuthorizationFilter;
-import com.sparta.mytodoapp.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
-	private final UserDetailsServiceImpl userDetailsService;
 	private final AuthenticationConfiguration authenticationConfiguration;
+	private final UserRepository userRepository;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -40,14 +40,14 @@ public class WebSecurityConfig {
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil,userRepository);
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
 
 	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
-		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
+		return new JwtAuthorizationFilter(jwtUtil);
 	}
 
 	@Bean
