@@ -32,11 +32,11 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private boolean complete = false;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     @JoinColumn(name="schedule_id")
     private List<Comment> comments = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
