@@ -36,7 +36,7 @@ public class Schedule extends Timestamped {
     @JoinColumn(name="schedule_id")
     private List<Comment> comments = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 

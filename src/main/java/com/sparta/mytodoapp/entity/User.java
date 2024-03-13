@@ -44,5 +44,10 @@ public class User {
         this.role = role;
     }
 
+    public User(Long userId,String username){
+        this.id = userId;
+        this.username = username;
+    }
+
 
 }

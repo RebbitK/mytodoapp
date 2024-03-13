@@ -47,8 +47,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+        Long userId = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getId();
 
-        String token = jwtUtil.createToken(username, role);
+        String token = jwtUtil.createToken(userId,username, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
         ObjectNode json = new ObjectMapper().createObjectNode();
         json.put("message", "상태코드:200 로그인성공                     ");
