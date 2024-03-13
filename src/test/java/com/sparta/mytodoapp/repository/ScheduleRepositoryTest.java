@@ -60,6 +60,7 @@ class ScheduleRepositoryTest {
         User user = new User("Test","12345678",UserRoleEnum.USER);
         Schedule schedule1 = new Schedule(new ScheduleRequestDto("제목1","내용1"),user);
         Schedule schedule2 = new Schedule(new ScheduleRequestDto("제목2","내용2"),user);
+        userRepository.save(user);
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
         //when
@@ -79,6 +80,7 @@ class ScheduleRepositoryTest {
         List<Schedule> schedules = new ArrayList<>();
         schedules.add(schedule1);
         schedules.add(schedule2);
+        userRepository.save(user);
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
         //when
