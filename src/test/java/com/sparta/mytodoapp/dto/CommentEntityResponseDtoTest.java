@@ -1,6 +1,7 @@
 package com.sparta.mytodoapp.dto;
 
 import com.sparta.mytodoapp.entity.CommentEntity;
+import com.sparta.mytodoapp.model.Comment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,7 @@ class CommentEntityResponseDtoTest {
         commentEntity.setUsername(username);
 
         // when
-        CommentResponseDto responseDto = new CommentResponseDto(commentEntity);
+        CommentResponseDto responseDto = Comment.from(commentEntity).responseDto();
         // then
         assertNotNull(responseDto);
         assertEquals(id, responseDto.getId());

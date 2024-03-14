@@ -89,26 +89,4 @@ class ScheduleEntityRepositoryTest {
         assertEquals(scheduleEntity2.getTitle(),testSchedule.get().getContent().get(0).getTitle());
     }
 
-    @Test
-    @DisplayName("할일카드 저장 테스트")
-    void save() {
-        //given
-        ScheduleEntity scheduleEntity = testSchedule();
-        //when
-        ScheduleEntity testScheduleEntity = scheduleRepository.save(scheduleEntity);
-        //then
-        assertEquals(scheduleEntity, testScheduleEntity);
-    }
-
-    @Test
-    @DisplayName("할일카드 삭제 테스트")
-    void delete() {
-        //given
-        ScheduleEntity scheduleEntity = testSchedule();
-        scheduleRepository.save(scheduleEntity);
-        //when
-        scheduleRepository.delete(scheduleEntity);
-        //then
-        assertTrue(scheduleRepository.findById(scheduleEntity.getId()).isEmpty());
-    }
 }

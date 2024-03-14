@@ -65,9 +65,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 		if (!Objects.equals(scheduleEntity.getUsername(), userEntity.getUsername())) {
 			throw new NoPermissionException("선택하신 할일카드를 수정할 권한이 없습니다.");
 		}
-		Schedule.from(scheduleEntity).update(requestDto);
-		jpaScheduleRepository.update(scheduleEntity);
-		return Schedule.from(scheduleEntity).responseDto();
+		Schedule schedule = Schedule.from(scheduleEntity);
+		schedule.update(requestDto);
+		jpaScheduleRepository.save(schedule.toEntity());
+		return schedule.responseDto();
 	}
 
 	@Override

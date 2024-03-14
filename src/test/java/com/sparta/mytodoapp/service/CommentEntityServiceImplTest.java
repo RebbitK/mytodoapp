@@ -42,7 +42,11 @@ class CommentEntityServiceImplTest {
     }
 
     private CommentEntity testComment() {
-        return new CommentEntity("댓글테스트", testUser());
+        ScheduleEntity scheduleEntity = new ScheduleEntity();
+        scheduleEntity.setId(10L);
+        scheduleEntity.setUsername("Test");
+        CommentRequestDto commentRequestDto = new CommentRequestDto("댓글테스트");
+        return new CommentEntity(commentRequestDto, testUser(),scheduleEntity);
     }
 
     private ScheduleEntity testSchedule() {

@@ -1,23 +1,29 @@
 package com.sparta.mytodoapp.repository;
 
+import com.sparta.mytodoapp.config.TestConfig;
 import com.sparta.mytodoapp.dto.CommentRequestDto;
 import com.sparta.mytodoapp.entity.CommentEntity;
+import com.sparta.mytodoapp.entity.ScheduleEntity;
 import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Import(TestConfig.class)
 class CommentEntityRepositoryTest {
 
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    JpaUserRepository jpaUserRepository;
 
     private CommentEntity testComment(){
         String username = "Test";
@@ -25,7 +31,11 @@ class CommentEntityRepositoryTest {
         UserRoleEnum role = UserRoleEnum.USER;
         UserEntity userEntity = new UserEntity(username,password,role);
         CommentRequestDto commentRequestDto = new CommentRequestDto("댓글");
-        return new CommentEntity(commentRequestDto, userEntity);
+        ScheduleEntity scheduleEntity = new ScheduleEntity();
+        scheduleEntity.setId(10L);
+        scheduleEntity.setUsername("Test");
+        jpaUserRepository.save(userEntity);
+        return new CommentEntity(commentRequestDto, userEntity,scheduleEntity);
     }
     @Test
     @DisplayName("댓글 저장 테스트")

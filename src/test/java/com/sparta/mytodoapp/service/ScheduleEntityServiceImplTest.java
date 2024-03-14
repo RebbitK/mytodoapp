@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import com.sparta.mytodoapp.dto.GetScheduleDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.entity.ScheduleEntity;
@@ -116,10 +117,13 @@ class ScheduleEntityServiceImplTest {
 	void getSchedule() {
 		//given
 		ScheduleEntity scheduleEntity = testSchedule();
-		when(mockJpaScheduleRepository.findById(scheduleEntity.getId())).thenReturn(
-			Optional.of(scheduleEntity));
+		GetScheduleDto getScheduleDto = new GetScheduleDto();
+		getScheduleDto.setText(scheduleEntity.getText());
+		getScheduleDto.setTitle(scheduleEntity.getTitle());
+		when(mockJpaScheduleRepository.findByIdGet(scheduleEntity.getId())).thenReturn(
+			Optional.of(getScheduleDto));
 		//when
-		ScheduleResponseDto response = scheduleService.getSchedule(scheduleEntity.getId());
+		GetScheduleDto response = scheduleService.getSchedule(scheduleEntity.getId());
 		//then
 		assertEquals(response.getTitle(), scheduleEntity.getTitle());
 		assertEquals(response.getText(), scheduleEntity.getText());
