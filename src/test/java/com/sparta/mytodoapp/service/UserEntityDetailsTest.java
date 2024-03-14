@@ -1,6 +1,6 @@
 package com.sparta.mytodoapp.service;
 
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -11,23 +11,23 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserDetailsTest {
+public class UserEntityDetailsTest {
 
     @Test
     @DisplayName("유저 details 테스트")
     void userDetailsImplTest() {
         // Given
-        User user = new User();
-        user.setUsername("testuser");
-        user.setPassword("password123");
-        user.setRole(UserRoleEnum.USER);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername("testuser");
+        userEntity.setPassword("password123");
+        userEntity.setRole(UserRoleEnum.USER);
 
         // When
-        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+        UserDetailsImpl userDetails = new UserDetailsImpl(userEntity);
 
         // Then
-        assertEquals(user.getUsername(), userDetails.getUsername());
-        assertEquals(user.getPassword(), userDetails.getPassword());
+        assertEquals(userEntity.getUsername(), userDetails.getUsername());
+        assertEquals(userEntity.getPassword(), userDetails.getPassword());
         assertEquals(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")), userDetails.getAuthorities());
     }
 }

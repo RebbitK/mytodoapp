@@ -3,8 +3,8 @@ package com.sparta.mytodoapp.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.mytodoapp.entity.QUser;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.QUserEntity;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.projection.LoginInfo;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,9 +18,9 @@ public class UserRepositoryImpl implements UserRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Optional<User> findByUsername(String username) {
-		User query = jpaQueryFactory.select(QUser.user)
-			.from(QUser.user)
+	public Optional<UserEntity> findByUsername(String username) {
+		UserEntity query = jpaQueryFactory.select(QUserEntity.userEntity)
+			.from(QUserEntity.userEntity)
 			.where(
 				usernameEq(username)
 			)
@@ -31,8 +31,8 @@ public class UserRepositoryImpl implements UserRepository {
 	@Override
 	public Optional<LoginInfo> findByUsernameAndPassword(String username) {
 		LoginInfo query = jpaQueryFactory.select(
-				Projections.fields(LoginInfo.class, QUser.user.id, QUser.user.username,QUser.user.password))
-			.from(QUser.user)
+				Projections.fields(LoginInfo.class, QUserEntity.userEntity.id, QUserEntity.userEntity.username,QUserEntity.userEntity.password))
+			.from(QUserEntity.userEntity)
 			.where(
 				usernameEq(username)
 			)
@@ -41,11 +41,11 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	private BooleanExpression usernameEq(String username) {
-		return Objects.nonNull(username) ? QUser.user.username.eq(username) : null;
+		return Objects.nonNull(username) ? QUserEntity.userEntity.username.eq(username) : null;
 	}
 
 	private BooleanExpression passwordEq(String password) {
-		return Objects.nonNull(password) ? QUser.user.password.eq(password) : null;
+		return Objects.nonNull(password) ? QUserEntity.userEntity.password.eq(password) : null;
 	}
 
 }

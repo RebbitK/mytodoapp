@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CommentRequestDtoTest {
+class CommentEntityRequestDtoTest {
 
     @Test
     @DisplayName("댓글 생성 테스트")

@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.sparta.mytodoapp.dto.InfoResponseDto;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.repository.JpaUserRepository;
 import java.util.Optional;
@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
-class UserServiceImplTest {
+class UserEntityServiceImplTest {
 
 	@Mock
 	JpaUserRepository jpaUserRepository;
@@ -54,9 +54,9 @@ class UserServiceImplTest {
 		SignupRequestDto signupRequestDto = new SignupRequestDto();
 		signupRequestDto.setUsername("Test");
 		signupRequestDto.setPassword("12345678");
-		User user = new User("Test", "12345678", UserRoleEnum.USER);
+		UserEntity userEntity = new UserEntity("Test", "12345678", UserRoleEnum.USER);
 		given(jpaUserRepository.findByUsername(signupRequestDto.getUsername())).willReturn(
-			Optional.of(user));
+			Optional.of(userEntity));
 		//when
 		Exception exception = assertThrows(IllegalArgumentException.class,
 			() -> userService.signup(signupRequestDto));
@@ -68,12 +68,12 @@ class UserServiceImplTest {
 	@DisplayName("정보 조회 테스트")
 	void infoTest() {
 		//given
-		User user = new User("Info", "12345678", UserRoleEnum.USER);
+		UserEntity userEntity = new UserEntity("Info", "12345678", UserRoleEnum.USER);
 		//when
-		InfoResponseDto response = userService.info(user);
+		InfoResponseDto response = userService.info(userEntity);
 		//then
 		assertNotNull(response);
-		assertEquals(response.getUsername(), user.getUsername());
+		assertEquals(response.getUsername(), userEntity.getUsername());
 	}
 
 }

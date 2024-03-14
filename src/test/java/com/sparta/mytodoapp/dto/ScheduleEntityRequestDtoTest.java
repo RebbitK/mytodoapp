@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ScheduleRequestDtoTest {
+class ScheduleEntityRequestDtoTest {
 
     @Test
     @DisplayName("할일 카드 requestDto 객체 생성 테스트")

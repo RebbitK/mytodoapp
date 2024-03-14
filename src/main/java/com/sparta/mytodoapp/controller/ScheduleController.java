@@ -1,21 +1,19 @@
 package com.sparta.mytodoapp.controller;
 
 import com.sparta.mytodoapp.dto.CommonResponse;
+import com.sparta.mytodoapp.dto.GetScheduleResponseDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
-import com.sparta.mytodoapp.exception.RestApiException;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import com.sparta.mytodoapp.service.ScheduleServiceImpl;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,7 +33,7 @@ public class ScheduleController {
 		@RequestBody ScheduleRequestDto requestDto,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		ScheduleResponseDto responseDto = scheduleServiceImpl.createSchedule(requestDto,
-			userDetails.getUser());
+			userDetails.getUserEntity());
 		return ResponseEntity.ok()
 			.body(CommonResponse.<ScheduleResponseDto>builder()
 				.msg("할일카드 작성에 성공하셨습니다.")
@@ -61,7 +59,7 @@ public class ScheduleController {
 	public ResponseEntity<CommonResponse<Page<ScheduleResponseDto>>> getMySchedules(
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Page<ScheduleResponseDto> responseDtoList = scheduleServiceImpl.getMySchedules(
-			userDetails.getUser());
+			userDetails.getUserEntity());
 		return ResponseEntity.ok()
 			.body(CommonResponse.<Page<ScheduleResponseDto>>builder()
 				.msg("나의 할일카드 조회에 성공하셨습니다.")
@@ -87,7 +85,7 @@ public class ScheduleController {
 	public ResponseEntity<CommonResponse<ScheduleResponseDto>> updateSchedule(@PathVariable Long id,
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
 		@RequestBody ScheduleRequestDto scheduleRequestDto) {
-		ScheduleResponseDto responseDto = scheduleServiceImpl.updateSchedule(id, userDetails.getUser(),
+		ScheduleResponseDto responseDto = scheduleServiceImpl.updateSchedule(id, userDetails.getUserEntity(),
 			scheduleRequestDto);
 		return ResponseEntity.ok()
 			.body(CommonResponse.<ScheduleResponseDto>builder()
@@ -101,7 +99,7 @@ public class ScheduleController {
 	@DeleteMapping("/schedules/{id}")
 	public ResponseEntity<CommonResponse<Boolean>> deleteSchedule(@PathVariable Long id,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		Boolean response = scheduleServiceImpl.deleteSchedule(id, userDetails.getUser());
+		Boolean response = scheduleServiceImpl.deleteSchedule(id, userDetails.getUserEntity());
 		return ResponseEntity.ok()
 			.body(CommonResponse.<Boolean>builder()
 				.msg("할일카드 삭제에 성공하셨습니다.")
@@ -115,7 +113,7 @@ public class ScheduleController {
 	public ResponseEntity<CommonResponse<ScheduleResponseDto>> completeSchedule(
 		@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		ScheduleResponseDto responseDto = scheduleServiceImpl.completeSchedule(id,
-			userDetails.getUser());
+			userDetails.getUserEntity());
 		return ResponseEntity.ok()
 			.body(CommonResponse.<ScheduleResponseDto>builder()
 				.msg("할일카드를 완료시켰습니다.")
@@ -123,6 +121,7 @@ public class ScheduleController {
 				.data(responseDto)
 				.build());
 	}
+
 
 //	@ExceptionHandler({IllegalArgumentException.class})
 //	public ResponseEntity<RestApiException> badRequest(IllegalArgumentException e) {

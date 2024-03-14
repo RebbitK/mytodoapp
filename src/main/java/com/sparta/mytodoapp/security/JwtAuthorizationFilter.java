@@ -1,6 +1,6 @@
 package com.sparta.mytodoapp.security;
 
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -42,18 +42,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 				setAuthentication(userId, username);
 			} catch (SecurityException | MalformedJwtException | SignatureException e) {
 				log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+				return;
 			} catch (ExpiredJwtException e) {
 				log.error("Expired JWT token, 만료된 JWT token 입니다.");
+				return;
 			} catch (UnsupportedJwtException e) {
 				log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+				return;
 			} catch (IllegalArgumentException e) {
 				log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+				return;
 			} catch (Exception e) {
 				log.error(e.getMessage());
+				return;
 			}
-			return;
 		}
-
 		filterChain.doFilter(req, res);
 	}
 
@@ -68,9 +71,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	// 인증 객체 생성
 	private Authentication createAuthentication(Long userId, String username) {
-		User user = new User(userId, username);
-		user.setRole(UserRoleEnum.USER);
-		UserDetails userDetails = new UserDetailsImpl(user);
+		UserEntity userEntity = new UserEntity(userId, username);
+		userEntity.setRole(UserRoleEnum.USER);
+		UserDetails userDetails = new UserDetailsImpl(userEntity);
 		return new CustomAuthentication(userDetails);
 	}
 }

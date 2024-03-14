@@ -1,7 +1,8 @@
 package com.sparta.mytodoapp.dto;
 
-import com.sparta.mytodoapp.entity.Comment;
-import com.sparta.mytodoapp.entity.Schedule;
+import com.sparta.mytodoapp.entity.CommentEntity;
+import com.sparta.mytodoapp.entity.ScheduleEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ScheduleResponseDto {
     private Long id;
     private String title;
@@ -18,19 +20,6 @@ public class ScheduleResponseDto {
     private boolean complete;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<Comment> commentList;
-
-
-    public ScheduleResponseDto(Schedule schedule) {
-        this.id = schedule.getId();
-        this.title = schedule.getTitle();
-        this.text = schedule.getText();
-        this.username = schedule.getUser().getUsername();
-        this.complete = schedule.getComplete();
-        this.createdAt = schedule.getCreatedAt();
-        this.modifiedAt = schedule.getModifiedAt();
-        this.commentList = schedule.getComments();
-    }
 
     public boolean getComplete() {
         return complete;

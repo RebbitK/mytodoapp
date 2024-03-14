@@ -1,8 +1,8 @@
 package com.sparta.mytodoapp.repository;
 
 import com.sparta.mytodoapp.dto.CommentRequestDto;
-import com.sparta.mytodoapp.entity.Comment;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.CommentEntity;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,46 +10,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
-class CommentRepositoryTest {
+class CommentEntityRepositoryTest {
 
     @Autowired
     CommentRepository commentRepository;
 
-    private Comment testComment(){
+    private CommentEntity testComment(){
         String username = "Test";
         String password = "12345678";
         UserRoleEnum role = UserRoleEnum.USER;
-        User user = new User(username,password,role);
+        UserEntity userEntity = new UserEntity(username,password,role);
         CommentRequestDto commentRequestDto = new CommentRequestDto("댓글");
-        return new Comment(commentRequestDto,user);
+        return new CommentEntity(commentRequestDto, userEntity);
     }
     @Test
     @DisplayName("댓글 저장 테스트")
     void save() {
         //given
-        Comment comment = testComment();
+        CommentEntity commentEntity = testComment();
         //when
-        Comment testComment = commentRepository.save(comment);
+        CommentEntity testCommentEntity = commentRepository.save(commentEntity);
         //then
-        assertEquals(comment,testComment);
+        assertEquals(commentEntity, testCommentEntity);
     }
 
     @Test
     @DisplayName("댓글 삭제 테스트")
     void delete() {
         //given
-        Comment comment = testComment();
-        commentRepository.save(comment);
+        CommentEntity commentEntity = testComment();
+        commentRepository.save(commentEntity);
         //when
-        commentRepository.delete(comment);
+        commentRepository.delete(commentEntity);
         //then
-        assertTrue(commentRepository.findById(comment.getId()).isEmpty());
+        assertTrue(commentRepository.findById(commentEntity.getId()).isEmpty());
     }
 
 }

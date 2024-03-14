@@ -8,9 +8,9 @@ import static org.mockito.Mockito.when;
 import com.sparta.mytodoapp.dto.CommentRequestDto;
 import com.sparta.mytodoapp.dto.CommentResponseDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
-import com.sparta.mytodoapp.entity.Comment;
-import com.sparta.mytodoapp.entity.Schedule;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.CommentEntity;
+import com.sparta.mytodoapp.entity.ScheduleEntity;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.exception.NoPermissionException;
 import com.sparta.mytodoapp.repository.CommentRepository;
@@ -22,12 +22,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
-class CommentServiceImplTest {
+class CommentEntityServiceImplTest {
     @Mock
     CommentRepository commentRepository;
     @Mock
@@ -35,31 +34,33 @@ class CommentServiceImplTest {
     @InjectMocks
     CommentServiceImpl commentService;
 
-    private User testUser() {
+    private UserEntity testUser() {
         String username = "Test";
         String password = "12345678";
         UserRoleEnum role = UserRoleEnum.USER;
-        return new User(username, password, role);
+        return new UserEntity(username, password, role);
     }
 
-    private Comment testComment() {
-        return new Comment("댓글테스트", testUser());
+    private CommentEntity testComment() {
+        return new CommentEntity("댓글테스트", testUser());
     }
 
-    private Schedule testSchedule() {
-        return new Schedule(new ScheduleRequestDto("제목", "내용"), testUser());
+    private ScheduleEntity testSchedule() {
+        return new ScheduleEntity(new ScheduleRequestDto("제목", "내용"), testUser());
     }
 
     @Test
     @DisplayName("댓글 작성 테스트")
     void createComment() {
         //given
-        User user = testUser();
-        Schedule schedule = testSchedule();
+        UserEntity userEntity = testUser();
+        ScheduleEntity scheduleEntity = testSchedule();
         CommentRequestDto commentRequestDto = new CommentRequestDto("댓글");
-        when(jpaScheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
+        when(jpaScheduleRepository.findById(scheduleEntity.getId())).thenReturn(Optional.of(
+            scheduleEntity));
         //when
-        CommentResponseDto response = commentService.createComment(schedule.getId(),user,commentRequestDto);
+        CommentResponseDto response = commentService.createComment(scheduleEntity.getId(),
+            userEntity,commentRequestDto);
         //then
         assertEquals(response.getComment(),commentRequestDto.getComment());
     }
@@ -67,11 +68,11 @@ class CommentServiceImplTest {
     @DisplayName("댓글 작성 실패 테스트")
     void createCommentFail(){
         //given
-        User user = testUser();
+        UserEntity userEntity = testUser();
         CommentRequestDto commentRequestDto = new CommentRequestDto("댓글");
         //when
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () -> commentService.createComment(100L,user,commentRequestDto));
+            () -> commentService.createComment(100L, userEntity,commentRequestDto));
         //then
         assertEquals(exception.getMessage(),"선택하신 할일카드는 존재하지 않습니다.");
     }
@@ -80,13 +81,15 @@ class CommentServiceImplTest {
     @DisplayName("댓글 수정 테스트")
     void updateComment() {
         //given
-        User user = testUser();
-        Schedule schedule = testSchedule();
+        UserEntity userEntity = testUser();
+        ScheduleEntity scheduleEntity = testSchedule();
         CommentRequestDto commentRequestDto = new CommentRequestDto("수정댓글");
-        Comment comment = testComment();
-        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        CommentEntity commentEntity = testComment();
+        when(commentRepository.findById(commentEntity.getId())).thenReturn(Optional.of(
+			commentEntity));
         //when
-        CommentResponseDto response = commentService.updateComment(schedule.getId(),user,commentRequestDto);
+        CommentResponseDto response = commentService.updateComment(scheduleEntity.getId(),
+            userEntity,commentRequestDto);
         //then
         assertEquals(response.getComment(),commentRequestDto.getComment());
     }
@@ -95,12 +98,12 @@ class CommentServiceImplTest {
     @DisplayName("댓글 수정 실패 - badRequest 테스트")
     void updateCommentFail_badRequest() {
         //given
-        User user = testUser();
-        Schedule schedule = testSchedule();
+        UserEntity userEntity = testUser();
+        ScheduleEntity scheduleEntity = testSchedule();
         CommentRequestDto commentRequestDto = new CommentRequestDto("수정댓글");
         //when
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () -> commentService.updateComment(schedule.getId(),user,commentRequestDto));
+            () -> commentService.updateComment(scheduleEntity.getId(), userEntity,commentRequestDto));
         //then
         assertEquals(exception.getMessage(),"선택하신 댓글은 존재하지 않습니다.");
     }
@@ -109,14 +112,15 @@ class CommentServiceImplTest {
     @DisplayName("댓글 수정 실패 - forBidden 테스트")
     void updateCommentFail_forBidden() {
         //given
-        User user = new User();
-        Schedule schedule = testSchedule();
+        UserEntity userEntity = new UserEntity();
+        ScheduleEntity scheduleEntity = testSchedule();
         CommentRequestDto commentRequestDto = new CommentRequestDto("수정댓글");
-        Comment comment = testComment();
-        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        CommentEntity commentEntity = testComment();
+        when(commentRepository.findById(commentEntity.getId())).thenReturn(Optional.of(
+			commentEntity));
         //when
         Exception exception = assertThrows(NoPermissionException.class,
-            () -> commentService.updateComment(schedule.getId(),user,commentRequestDto));
+            () -> commentService.updateComment(scheduleEntity.getId(), userEntity,commentRequestDto));
         //then
         assertEquals(exception.getMessage(),"선택하신 댓글을 수정할 권한이 없습니다.");
     }
@@ -125,11 +129,12 @@ class CommentServiceImplTest {
     @DisplayName("댓글 삭제 테스트")
     void deleteComment() {
         //given
-        User user = testUser();
-        Comment comment = testComment();
-        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        UserEntity userEntity = testUser();
+        CommentEntity commentEntity = testComment();
+        when(commentRepository.findById(commentEntity.getId())).thenReturn(Optional.of(
+			commentEntity));
         //when
-        Boolean response = commentService.deleteComment(comment.getId(),user);
+        Boolean response = commentService.deleteComment(commentEntity.getId(), userEntity);
         //then
         assertTrue(response);
     }
@@ -138,11 +143,11 @@ class CommentServiceImplTest {
     @DisplayName("댓글 삭제 실패 - badRequest 테스트")
     void deleteCommentFail_badRequest(){
         //given
-        User user = testUser();
-        Comment comment = testComment();
+        UserEntity userEntity = testUser();
+        CommentEntity commentEntity = testComment();
         //when
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () ->commentService.deleteComment(comment.getId(),user));
+            () ->commentService.deleteComment(commentEntity.getId(), userEntity));
         //then
         assertEquals(exception.getMessage(),"선택하신 댓글은 존재하지 않습니다.");
     }
@@ -151,12 +156,13 @@ class CommentServiceImplTest {
     @DisplayName("댓글 삭제 실패 - forBidden 테스트")
     void deleteCommentFail_forBidden(){
         //given
-        User user = new User();
-        Comment comment = testComment();
-        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        UserEntity userEntity = new UserEntity();
+        CommentEntity commentEntity = testComment();
+        when(commentRepository.findById(commentEntity.getId())).thenReturn(Optional.of(
+			commentEntity));
         //when
         Exception exception = assertThrows(NoPermissionException.class,
-            ()->commentService.deleteComment(comment.getId(),user));
+            ()->commentService.deleteComment(commentEntity.getId(), userEntity));
         //then
         assertEquals(exception.getMessage(),"선택하신 댓글을 삭제할 권한이 없습니다.");
     }

@@ -3,7 +3,6 @@ package com.sparta.mytodoapp.controller;
 import com.sparta.mytodoapp.dto.CommonResponse;
 import com.sparta.mytodoapp.dto.InfoResponseDto;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
-import com.sparta.mytodoapp.exception.RestApiException;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
 import com.sparta.mytodoapp.service.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +39,7 @@ public class UserController {
 	@GetMapping("/user/info")
 	public ResponseEntity<CommonResponse<InfoResponseDto>> info(
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		InfoResponseDto responseDto = userServiceImpl.info(userDetails.getUser());
+		InfoResponseDto responseDto = userServiceImpl.info(userDetails.getUserEntity());
 		return ResponseEntity.ok()
 			.body(CommonResponse.<InfoResponseDto>builder()
 				.msg("정보 조회에 성공하셨습니다.")

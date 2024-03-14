@@ -1,6 +1,6 @@
 package com.sparta.mytodoapp.security;
 
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,26 +13,26 @@ import java.util.Collection;
 @Getter
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final UserEntity userEntity;
 
-    public UserDetailsImpl(User user) {
-        this.user = user;
+    public UserDetailsImpl(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return userEntity.getUsername();
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        UserRoleEnum role = user.getRole();
+        UserRoleEnum role = userEntity.getRole();
         String authority = role.getAuthority();
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);

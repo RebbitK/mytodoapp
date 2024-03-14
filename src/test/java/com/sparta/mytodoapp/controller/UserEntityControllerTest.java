@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodoapp.config.WebSecurityConfig;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import com.sparta.mytodoapp.mvc.MockSpringSecurityFilter;
@@ -41,7 +41,7 @@ import org.springframework.web.context.WebApplicationContext;
 	}
 )
 @ActiveProfiles("test")
-class UserControllerTest {
+class UserEntityControllerTest {
 
 	private MockMvc mvc;
 
@@ -70,8 +70,8 @@ class UserControllerTest {
 		String username = "Test";
 		String password = "12345678";
 		UserRoleEnum role = UserRoleEnum.USER;
-		User user = new User(username, password, role);
-		UserDetailsImpl testUserDetails = new UserDetailsImpl(user);
+		UserEntity userEntity = new UserEntity(username, password, role);
+		UserDetailsImpl testUserDetails = new UserDetailsImpl(userEntity);
 		mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "",
 			testUserDetails.getAuthorities());
 	}

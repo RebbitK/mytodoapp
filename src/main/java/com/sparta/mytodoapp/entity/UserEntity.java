@@ -1,25 +1,23 @@
 package com.sparta.mytodoapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
 @DynamicInsert
 @DynamicUpdate
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,17 +32,13 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name="user_id")
-    private List<Schedule> schedules = new ArrayList<>();
-
-    public User(String username, String password, UserRoleEnum role) {
+    public UserEntity(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    public User(Long userId,String username){
+    public UserEntity(Long userId,String username){
         this.id = userId;
         this.username = username;
     }

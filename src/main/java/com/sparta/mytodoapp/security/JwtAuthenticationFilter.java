@@ -1,14 +1,11 @@
 package com.sparta.mytodoapp.security;
 
-import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sparta.mytodoapp.dto.LoginRequestDto;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
-import com.sparta.mytodoapp.projection.LoginInfo;
 import com.sparta.mytodoapp.repository.JpaUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,16 +44,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(),
 				LoginRequestDto.class);
 			//인증 처리를 하는 메서드 입력받은 아이디와 비밀번호로 검증
-			User user = jpaUserRepository.findByUsername(
+			UserEntity userEntity = jpaUserRepository.findByUsername(
 					requestDto.getUsername())
 				.orElseThrow(
 					() -> new BadCredentialsException("잘못된 아이디를 입력하셨습니다.")); //인증실패를 위한 예외
-			if(!passwordEncoder.matches(requestDto.getPassword(),user.getPassword()))
+			if(!passwordEncoder.matches(requestDto.getPassword(), userEntity.getPassword()))
 			{
 				throw new BadCredentialsException("잘못된 비밀번호를 입력하셨습니다.");
 			}
 			return new CustomAuthenticationToken(
-				user,
+				userEntity,
 				requestDto.getPassword()
 			);
 		} catch (IOException e) {
@@ -69,8 +66,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request,
 		HttpServletResponse response, FilterChain chain, Authentication authResult)
 		throws IOException {
-		User user = (User) authResult.getPrincipal();
-		String token = jwtUtil.createToken(user.getId(), user.getUsername(),
+		UserEntity userEntity = (UserEntity) authResult.getPrincipal();
+		String token = jwtUtil.createToken(userEntity.getId(), userEntity.getUsername(),
 			UserRoleEnum.USER);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 		ObjectNode json = new ObjectMapper().createObjectNode();

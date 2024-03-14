@@ -4,8 +4,9 @@ import static com.sparta.mytodoapp.entity.UserRoleEnum.USER;
 
 import com.sparta.mytodoapp.dto.InfoResponseDto;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
-import com.sparta.mytodoapp.entity.User;
+import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
+import com.sparta.mytodoapp.model.User;
 import com.sparta.mytodoapp.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,14 +34,14 @@ public class UserServiceImpl implements UserService{
         UserRoleEnum role = USER;
 
         // 사용자 등록
-        User user = new User(username, password, role);
-        jpaUserRepository.save(user);
+        UserEntity userEntity = new UserEntity(username, password, role);
+        jpaUserRepository.save(userEntity);
         return true;
     }
 
 
     @Override
-    public InfoResponseDto info(User user) {;
-        return new InfoResponseDto(user);
+    public InfoResponseDto info(UserEntity userEntity) {;
+        return User.from(userEntity).responseDto();
     }
 }
