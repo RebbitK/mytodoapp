@@ -9,7 +9,7 @@ import com.sparta.mytodoapp.dto.InfoResponseDto;
 import com.sparta.mytodoapp.dto.SignupRequestDto;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
-import com.sparta.mytodoapp.repository.UserRepository;
+import com.sparta.mytodoapp.repository.JpaUserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 class UserServiceImplTest {
 
 	@Mock
-	UserRepository userRepository;
+	JpaUserRepository jpaUserRepository;
 
 	@Mock
 	PasswordEncoder passwordEncoder;
@@ -55,7 +55,7 @@ class UserServiceImplTest {
 		signupRequestDto.setUsername("Test");
 		signupRequestDto.setPassword("12345678");
 		User user = new User("Test", "12345678", UserRoleEnum.USER);
-		given(userRepository.findByUsername(signupRequestDto.getUsername())).willReturn(
+		given(jpaUserRepository.findByUsername(signupRequestDto.getUsername())).willReturn(
 			Optional.of(user));
 		//when
 		Exception exception = assertThrows(IllegalArgumentException.class,

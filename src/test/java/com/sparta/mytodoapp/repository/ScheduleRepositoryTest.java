@@ -3,8 +3,6 @@ package com.sparta.mytodoapp.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.mytodoapp.config.AuditingConfig;
 import com.sparta.mytodoapp.config.TestConfig;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.entity.Schedule;
@@ -14,13 +12,10 @@ import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +35,7 @@ class ScheduleRepositoryTest {
     private EntityManager entityManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private JpaUserRepository jpaUserRepository;
 
     private Pageable pageable = PageRequest.of(0, 5);
 
@@ -60,7 +55,7 @@ class ScheduleRepositoryTest {
         User user = new User("Test","12345678",UserRoleEnum.USER);
         Schedule schedule1 = new Schedule(new ScheduleRequestDto("제목1","내용1"),user);
         Schedule schedule2 = new Schedule(new ScheduleRequestDto("제목2","내용2"),user);
-        userRepository.save(user);
+        jpaUserRepository.save(user);
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
         //when
@@ -80,7 +75,7 @@ class ScheduleRepositoryTest {
         List<Schedule> schedules = new ArrayList<>();
         schedules.add(schedule1);
         schedules.add(schedule2);
-        userRepository.save(user);
+        jpaUserRepository.save(user);
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
         //when

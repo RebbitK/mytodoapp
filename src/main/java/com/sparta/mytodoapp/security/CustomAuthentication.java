@@ -5,12 +5,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class MyCustomAuthentication implements Authentication {
+public class CustomAuthentication implements Authentication {
 
 	private final UserDetails userDetails;
 	private boolean authenticated;
 
-	public MyCustomAuthentication(UserDetails userDetails) {
+	public CustomAuthentication(UserDetails userDetails) {
 		this.userDetails = userDetails;
 		this.authenticated = true; // 사용자가 인증된 경우
 	}

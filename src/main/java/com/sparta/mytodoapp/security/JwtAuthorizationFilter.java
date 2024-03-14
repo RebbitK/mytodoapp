@@ -4,6 +4,10 @@ import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,18 +33,26 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		String tokenValue = jwtUtil.getJwtFromHeader(req);
+		if (StringUtils.hasText(tokenValue)) {
 
-		//if (StringUtils.hasText(tokenValue)) {
 			try {
 				Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-				Long userId = info.get("userId",Long.class);
+				Long userId = info.get("userId", Long.class);
 				String username = info.getSubject();
-					setAuthentication(userId,username);
+				setAuthentication(userId, username);
+			} catch (SecurityException | MalformedJwtException | SignatureException e) {
+				log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+			} catch (ExpiredJwtException e) {
+				log.error("Expired JWT token, 만료된 JWT token 입니다.");
+			} catch (UnsupportedJwtException e) {
+				log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+			} catch (IllegalArgumentException e) {
+				log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
 			} catch (Exception e) {
 				log.error(e.getMessage());
-				return;
 			}
-		//}
+			return;
+		}
 
 		filterChain.doFilter(req, res);
 	}
@@ -60,6 +71,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		User user = new User(userId, username);
 		user.setRole(UserRoleEnum.USER);
 		UserDetails userDetails = new UserDetailsImpl(user);
-		return new MyCustomAuthentication(userDetails);
+		return new CustomAuthentication(userDetails);
 	}
 }

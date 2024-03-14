@@ -1,20 +1,24 @@
 package com.sparta.mytodoapp.security;
 
+import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sparta.mytodoapp.dto.LoginRequestDto;
 import com.sparta.mytodoapp.entity.User;
 import com.sparta.mytodoapp.entity.UserRoleEnum;
 import com.sparta.mytodoapp.jwt.JwtUtil;
-import com.sparta.mytodoapp.repository.UserRepository;
+import com.sparta.mytodoapp.projection.LoginInfo;
+import com.sparta.mytodoapp.repository.JpaUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
@@ -22,11 +26,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final JwtUtil jwtUtil;
 
-	private final UserRepository userRepository;
+	private final JpaUserRepository jpaUserRepository;
 
-	public JwtAuthenticationFilter(JwtUtil jwtUtil, UserRepository userRepository) {
+	private final PasswordEncoder passwordEncoder;
+
+
+
+	public JwtAuthenticationFilter(JwtUtil jwtUtil, JpaUserRepository jpaUserRepository,
+		PasswordEncoder passwordEncoder) {
 		this.jwtUtil = jwtUtil;
-		this.userRepository = userRepository;
+		this.jpaUserRepository = jpaUserRepository;
+		this.passwordEncoder = passwordEncoder;
 		setFilterProcessesUrl("/api/user/login");
 	}
 
@@ -36,21 +46,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		try {
 			LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(),
 				LoginRequestDto.class);
-			User user = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(
-				()-> new IllegalArgumentException("로그인 실패")
-			);
 			//인증 처리를 하는 메서드 입력받은 아이디와 비밀번호로 검증
+			User user = jpaUserRepository.findByUsername(
+					requestDto.getUsername())
+				.orElseThrow(
+					() -> new BadCredentialsException("잘못된 아이디를 입력하셨습니다.")); //인증실패를 위한 예외
+			if(!passwordEncoder.matches(requestDto.getPassword(),user.getPassword()))
+			{
+				throw new BadCredentialsException("잘못된 비밀번호를 입력하셨습니다.");
+			}
 			return new CustomAuthenticationToken(
 				user,
 				requestDto.getPassword()
 			);
-//			Authentication authenticate = getAuthenticationManager().authenticate(
-//				new CustomAuthenticationToken(
-//					requestDto.getUsername(),
-//					requestDto.getPassword()
-//				)
-//			);
-//			return authenticate;
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			throw new RuntimeException(e.getMessage());
@@ -62,7 +70,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		HttpServletResponse response, FilterChain chain, Authentication authResult)
 		throws IOException {
 		User user = (User) authResult.getPrincipal();
-		String token = jwtUtil.createToken(user.getId(), user.getUsername(), UserRoleEnum.USER);
+		String token = jwtUtil.createToken(user.getId(), user.getUsername(),
+			UserRoleEnum.USER);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 		ObjectNode json = new ObjectMapper().createObjectNode();
 		json.put("message", "상태코드:200 로그인성공                     ");
@@ -77,11 +86,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		HttpServletResponse response, AuthenticationException failed) throws IOException {
 		response.setStatus(401);
 		ObjectNode json = new ObjectMapper().createObjectNode();
-		json.put("message", "상태코드:401 로그인실패                     ");
+		json.put("message", failed.getMessage()+"                                ");
 		String newResponse = new ObjectMapper().writeValueAsString(json);
 		response.setContentType("application/json");
 		response.setContentLength(newResponse.length());
 		response.getOutputStream().write(newResponse.getBytes());
+		log.error(failed.getMessage());
 	}
 
 }

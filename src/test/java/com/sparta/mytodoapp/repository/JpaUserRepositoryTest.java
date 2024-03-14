@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
-class UserRepositoryTest {
+class JpaUserRepositoryTest {
     @Autowired
-    private UserRepository userRepository;
+    private JpaUserRepository jpaUserRepository;
 
     private User testUser() {
         String username = "Test";
@@ -29,9 +29,9 @@ class UserRepositoryTest {
     void findByUsername() {
         //given
         User user = testUser();
-        userRepository.save(user);
+        jpaUserRepository.save(user);
         //when
-        Optional<User> testUser = userRepository.findByUsername("Test");
+        Optional<User> testUser = jpaUserRepository.findByUsername("Test");
         //then
         assertEquals(user,testUser.get());
     }
@@ -42,7 +42,7 @@ class UserRepositoryTest {
         //given
         User user = testUser();
         //when
-        User testUser = userRepository.save(user);
+        User testUser = jpaUserRepository.save(user);
         //then
         assertEquals(user,testUser);
     }
@@ -52,10 +52,10 @@ class UserRepositoryTest {
     void delete() {
         //given
         User user = testUser();
-        userRepository.save(user);
+        jpaUserRepository.save(user);
         //when
-        userRepository.delete(user);
+        jpaUserRepository.delete(user);
         //then
-        assertTrue(userRepository.findById(user.getId()).isEmpty());
+        assertTrue(jpaUserRepository.findById(user.getId()).isEmpty());
     }
 }

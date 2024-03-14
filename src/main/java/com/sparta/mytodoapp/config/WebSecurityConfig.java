@@ -1,7 +1,7 @@
 package com.sparta.mytodoapp.config;
 
 import com.sparta.mytodoapp.jwt.JwtUtil;
-import com.sparta.mytodoapp.repository.UserRepository;
+import com.sparta.mytodoapp.repository.JpaUserRepository;
 import com.sparta.mytodoapp.security.JwtAuthenticationFilter;
 import com.sparta.mytodoapp.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,12 +24,9 @@ public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final AuthenticationConfiguration authenticationConfiguration;
-	private final UserRepository userRepository;
+	private final JpaUserRepository jpaUserRepository;
+	private final PasswordEncoder passwordEncoder;
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
@@ -40,7 +36,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil,userRepository);
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, jpaUserRepository,passwordEncoder);
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}

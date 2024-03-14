@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.mytodoapp.entity.QSchedule;
 import com.sparta.mytodoapp.entity.Schedule;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
 	@Override
 	public Optional<Page<Schedule>> findByUsername(String username, Pageable pageable) {
-		var query = jpaQueryFactory.select(QSchedule.schedule)
+		List<Schedule> query = jpaQueryFactory.select(QSchedule.schedule)
 			.from(QSchedule.schedule)
 			.where(
 				usernameEq(username)
@@ -31,7 +32,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
-		var count = jpaQueryFactory.select(Wildcard.count)
+		Long count = jpaQueryFactory.select(Wildcard.count)
 			.from(QSchedule.schedule)
 			.where(
 				usernameEq(username)
@@ -44,14 +45,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
 	@Override
 	public Optional<Page<Schedule>> findAllByOrderByModifiedAtDesc(Pageable pageable) {
-		var query = jpaQueryFactory.select(QSchedule.schedule)
+		List<Schedule> query = jpaQueryFactory.select(QSchedule.schedule)
 			.from(QSchedule.schedule)
 			.leftJoin(QSchedule.schedule.comments).fetchJoin()
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.orderBy(QSchedule.schedule.modifiedAt.desc())
 			.fetch();
-		var count = jpaQueryFactory.select(Wildcard.count)
+		Long count = jpaQueryFactory.select(Wildcard.count)
 			.from(QSchedule.schedule)
 			.fetch()
 			.get(0);

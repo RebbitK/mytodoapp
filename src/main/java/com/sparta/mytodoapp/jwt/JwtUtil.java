@@ -70,25 +70,6 @@ public class JwtUtil {
 		return null;
 	}
 
-
-	// 토큰 검증
-	public boolean validateToken(String token) {
-		try {
-			//토큰 변조 및 만료와 같은 상태에 대한 검증 key는 암호화한 키 token은 getJwtFromHeader에서 만든 순수한 토큰
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-			return true;
-		} catch (SecurityException | MalformedJwtException | SignatureException e) {
-			log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-		} catch (ExpiredJwtException e) {
-			log.error("Expired JWT token, 만료된 JWT token 입니다.");
-		} catch (UnsupportedJwtException e) {
-			log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-		} catch (IllegalArgumentException e) {
-			log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-		}
-		return false;
-	}
-
 	// 토큰에서 사용자 정보 가져오기
 	public Claims getUserInfoFromToken(String token) {
 		//validateToken에서 검증을 한 토큰의 body를 가져옴 claims라는 데이터의 집합으로 반환함
