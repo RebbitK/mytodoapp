@@ -1,20 +1,14 @@
 package com.sparta.mytodoapp.service;
 
 
-import com.querydsl.core.Tuple;
-import com.sparta.mytodoapp.dto.CommentResponseDto;
-import com.sparta.mytodoapp.dto.GetScheduleResponseDto;
+import com.sparta.mytodoapp.dto.GetScheduleDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
-import com.sparta.mytodoapp.entity.CommentEntity;
 import com.sparta.mytodoapp.entity.ScheduleEntity;
 import com.sparta.mytodoapp.entity.UserEntity;
 import com.sparta.mytodoapp.exception.NoPermissionException;
-import com.sparta.mytodoapp.model.Comment;
 import com.sparta.mytodoapp.model.Schedule;
 import com.sparta.mytodoapp.repository.JpaScheduleRepository;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,10 +50,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public ScheduleResponseDto getSchedule(Long id) {
-		ScheduleEntity scheduleEntity = jpaScheduleRepository.findByIdGet(id).orElseThrow(()->
+	public GetScheduleDto getSchedule(Long id) {
+		GetScheduleDto getScheduleDto = jpaScheduleRepository.findByIdGet(id).orElseThrow(()->
 			new IllegalArgumentException("선택하신 할일카드는 존재하지 않습니다."));
-		return Schedule.from(scheduleEntity).getResponseDto(scheduleEntity.get);
+		return getScheduleDto;
 	}
 
 	@Override

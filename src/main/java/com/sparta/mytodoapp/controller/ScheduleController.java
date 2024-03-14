@@ -1,7 +1,7 @@
 package com.sparta.mytodoapp.controller;
 
 import com.sparta.mytodoapp.dto.CommonResponse;
-import com.sparta.mytodoapp.dto.GetScheduleResponseDto;
+import com.sparta.mytodoapp.dto.GetScheduleDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.security.UserDetailsImpl;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -70,10 +69,10 @@ public class ScheduleController {
 
 	//선택 할일카드 조회
 	@GetMapping("/schedules/{id}")
-	public ResponseEntity<CommonResponse<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
-		ScheduleResponseDto responseDto = scheduleServiceImpl.getSchedule(id);
+	public ResponseEntity<CommonResponse<GetScheduleDto>> getSchedule(@PathVariable Long id) {
+		GetScheduleDto responseDto = scheduleServiceImpl.getSchedule(id);
 		return ResponseEntity.ok()
-			.body(CommonResponse.<ScheduleResponseDto>builder()
+			.body(CommonResponse.<GetScheduleDto>builder()
 				.msg(id + "번 할일카드 조회에 성공하셨습니다.")
 				.statusCode(HttpStatus.OK.value())
 				.data(responseDto)

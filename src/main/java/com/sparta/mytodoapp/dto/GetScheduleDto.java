@@ -1,6 +1,5 @@
 package com.sparta.mytodoapp.dto;
 
-import com.sparta.mytodoapp.entity.ScheduleEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetScheduleResponseDto {
+public class GetScheduleDto {
 
 	private Long id;
 	private String title;

@@ -1,6 +1,7 @@
 package com.sparta.mytodoapp.repository;
 
 import com.querydsl.core.Tuple;
+import com.sparta.mytodoapp.dto.GetScheduleDto;
 import com.sparta.mytodoapp.entity.ScheduleEntity;
 import com.sparta.mytodoapp.model.Schedule;
 import java.util.List;
@@ -18,6 +19,6 @@ public interface ScheduleRepository {
 
 	void deleteSchedule(ScheduleEntity scheduleEntity);
 
-	Optional<ScheduleEntity> findByIdGet(Long id);
+	Optional<GetScheduleDto> findByIdGet(Long id);
 
 }

@@ -1,7 +1,7 @@
 package com.sparta.mytodoapp.model;
 
 import com.sparta.mytodoapp.dto.CommentResponseDto;
-import com.sparta.mytodoapp.dto.GetScheduleResponseDto;
+import com.sparta.mytodoapp.dto.GetScheduleDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.entity.CommentEntity;
@@ -61,8 +61,8 @@ public class Schedule {
 		);
 	}
 
-	public GetScheduleResponseDto getResponseDto(List<CommentResponseDto> commentEntities){
-		return new GetScheduleResponseDto(
+	public GetScheduleDto getResponseDto(List<CommentResponseDto> commentResponseDtos){
+		return new GetScheduleDto(
 			id,
 			title,
 			text,
@@ -70,7 +70,7 @@ public class Schedule {
 			complete,
 			createdAt,
 			modifiedAt,
-			commentEntities
+			commentResponseDtos
 		);
 	}
 

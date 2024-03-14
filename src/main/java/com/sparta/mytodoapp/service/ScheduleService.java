@@ -1,6 +1,6 @@
 package com.sparta.mytodoapp.service;
 
-import com.sparta.mytodoapp.dto.GetScheduleResponseDto;
+import com.sparta.mytodoapp.dto.GetScheduleDto;
 import com.sparta.mytodoapp.dto.ScheduleRequestDto;
 import com.sparta.mytodoapp.dto.ScheduleResponseDto;
 import com.sparta.mytodoapp.entity.UserEntity;
@@ -34,7 +34,7 @@ public interface ScheduleService {
 	 * @param id 게시글 조회 ID
 	 * @return 선택 게시글 조회 결과
 	 */
-	ScheduleResponseDto getSchedule(Long id);
+	GetScheduleDto getSchedule(Long id);
 
 	/**
 	 * 게시글 수정
