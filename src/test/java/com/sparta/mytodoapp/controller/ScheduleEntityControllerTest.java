@@ -43,7 +43,6 @@ import org.springframework.web.context.WebApplicationContext;
                 )
         }
 )
-@EnableJpaAuditing
 @ActiveProfiles("test")
 public class ScheduleEntityControllerTest {
     private MockMvc mvc;
