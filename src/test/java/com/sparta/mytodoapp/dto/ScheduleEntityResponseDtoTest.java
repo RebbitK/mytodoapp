@@ -1,19 +1,15 @@
 package com.sparta.mytodoapp.dto;
 
-import com.sparta.mytodoapp.config.AuditingConfig;
-import com.sparta.mytodoapp.entity.CommentEntity;
+import com.sparta.mytodoapp.config.JpaConfig;
 import com.sparta.mytodoapp.entity.ScheduleEntity;
 import com.sparta.mytodoapp.model.Schedule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Import;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import(AuditingConfig.class)
+@Import(JpaConfig.class)
 class ScheduleEntityResponseDtoTest {
     @Test
     @DisplayName("할일카드 responseDto 객체 생성 테스트")
